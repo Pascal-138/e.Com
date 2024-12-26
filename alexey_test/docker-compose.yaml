@@ -1,0 +1,29 @@
+version: '3.10'
+
+services:
+  templates:
+    build:
+      context: ./app
+    command: ["python3", "main.py"]
+    restart: always
+    ports:
+      - '8000:8000'
+#    env_file:
+#      - ./template.env
+    depends_on:
+      - mongo
+    volumes:
+      - ./app/:/usr/src/app/
+    networks:
+      - net_inner
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: verified_user
+      MONGO_INITDB_ROOT_PASSWORD: very_secret_password
+
+networks:
+  net_inner:
+    driver: bridge
